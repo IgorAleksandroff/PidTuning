@@ -1,7 +1,7 @@
 <MyField@MDTextFieldRect>
     size_hint: None, None
     size: "100dp", "32dp"
-    input_filter: "int"
+    input_filter: "float"
     pos_hint: {"center_y": .5}
 
 
@@ -34,16 +34,19 @@
                 id: gain
                 # Bind the edit completion event to the controller method.
                 on_focus: root.set_gain(self.focus, float(self.text or 0))
+                hint_text: "Process gain"
 
             MyField:
                 id: tau
                 # Bind the edit completion event to the controller method.
                 on_focus: root.set_tau(self.focus, float(self.text or 1))
+                hint_text: "Tau"
 
             MyField:
                 id: dt
                 # Bind the edit completion event to the controller method.
                 on_focus: root.set_dt(self.focus, float(self.text or 1))
+                hint_text: "Dead time"
 
         MDLabel:
             text: "Cohen-Coon calculation:"
