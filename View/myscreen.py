@@ -40,7 +40,9 @@ class MyScreenView(MDScreen, Observer):
         The method is called when the model changes.
 
         """
-        self.ids.result.text = str(self.model.sum)
+        self.ids.p.text = str(round(self.model.p, 2))
+        self.ids.i.text = str(round(self.model.i, 2))
+        self.ids.d.text = str(round(self.model.d, 2))
 
 
 Builder.load_file(os.path.join(os.path.dirname(__file__), "myscreen.kv"))

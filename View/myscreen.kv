@@ -21,7 +21,7 @@
         md_bg_color: app.theme_cls.disabled_hint_text_color
 
         MDLabel:
-            text: "Calculate PID parameters:"
+            text: "Control object:"
             font_style: "H6"
             pos_hint: {"center_x": .5}
             adaptive_size: True
@@ -33,17 +33,33 @@
             MyField:
                 id: gain
                 # Bind the edit completion event to the controller method.
-                on_focus: root.set_gain(self.focus, int(self.text or 0))
+                on_focus: root.set_gain(self.focus, float(self.text or 0))
 
             MyField:
                 id: tau
                 # Bind the edit completion event to the controller method.
-                on_focus: root.set_tau(self.focus, int(self.text or 0))
+                on_focus: root.set_tau(self.focus, float(self.text or 1))
 
             MyField:
                 id: dt
                 # Bind the edit completion event to the controller method.
-                on_focus: root.set_dt(self.focus, int(self.text or 0))
+                on_focus: root.set_dt(self.focus, float(self.text or 1))
+
+        MDLabel:
+            text: "Cohen-Coon calculation:"
+            font_style: "H6"
+            pos_hint: {"center_x": .5}
+            adaptive_size: True
+
+        MDBoxLayout:
+            adaptive_size: True
+            spacing: "12dp"
 
             MyField:
-                id: result
+                id: p
+
+            MyField:
+                id: i
+
+            MyField:
+                id: d
