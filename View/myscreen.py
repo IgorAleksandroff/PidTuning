@@ -40,6 +40,9 @@ class MyScreenView(MDScreen, Observer):
         The method is called when the model changes.
 
         """
+        self.ids.pp.text = str(round(self.model.pp, 2))
+        self.ids.ii.text = str(round(self.model.ii, 2))
+
         self.ids.p.text = str(round(self.model.p, 2))
         self.ids.i.text = str(round(self.model.i, 2))
         self.ids.d.text = str(round(self.model.d, 2))

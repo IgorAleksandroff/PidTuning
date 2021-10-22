@@ -22,6 +22,8 @@ class MyScreenModel:
         self._gain = 0
         self._tau = 1
         self._dt = 1
+        self._pp = 0
+        self._ii = 0
         self._p = 0
         self._i = 0
         self._d = 0
@@ -40,6 +42,14 @@ class MyScreenModel:
         return self._dt
 
     @property
+    def pp(self):
+        return self._pp
+
+    @property
+    def ii(self):
+        return self._ii
+    @property
+
     def p(self):
         return self._p
 
@@ -70,15 +80,22 @@ class MyScreenModel:
         self.notify_observers()
 
     def calculation_param(self):
+        """The Cohen-Coon method calculates PI parameters."""
+
+        # Calculating Proportional Band (PB)
+        self._pp = 100 * self._gain / ((0.092 + self._tau / self._dt) * 0.9)
+        # Calculating Integral Time (Ti)
+        self._ii = 3.33 * self._dt * (self._tau + 0.092 * self._dt) / (self._tau + 2.22 * self._dt)
+
         """The Cohen-Coon method calculates PID parameters."""
-        print(self._gain, self._tau, self._dt)
+
         # Calculating Proportional Band (PB)
         self._p = 100 * self._gain / ((0.185 + self._tau / self._dt) * 1.35)
         # Calculating Integral Time (Ti)
         self._i = 2.5 * self._dt * (self._tau + 0.185 * self._dt) / (self._tau + 0.611 * self._dt)
         # Calculating Derivative Time (Td)
         self._d = 0.37 * self._dt * self._tau / (self._tau + 0.185 * self._dt)
-        print(self._p, self._i, self._d)
+
     def add_observer(self, observer):
         self._observers.append(observer)
 
