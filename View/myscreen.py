@@ -2,11 +2,19 @@ import os
 
 from kivy.lang import Builder
 from kivy.properties import ObjectProperty
+from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.screenmanager import Screen
 
 from kivymd.uix.screen import MDScreen
+from kivymd.uix.datatables import MDDataTable
+from kivy.metrics import dp
+from kivymd.uix.tab import MDTabsBase
+from kivymd.uix.textfield import MDTextField
 
 from Utility.observer import Observer
 
+class Tab(FloatLayout, MDTabsBase):
+    '''Class implementing content for a tab.'''
 
 class MyScreenView(MDScreen, Observer):
     """"
@@ -18,6 +26,8 @@ class MyScreenView(MDScreen, Observer):
     controller = ObjectProperty()
     # <Model.myscreen.MyScreenModel object>.
     model = ObjectProperty()
+
+    data_tables = None
 
     def __init__(self, **kw):
         super().__init__(**kw)
@@ -36,6 +46,7 @@ class MyScreenView(MDScreen, Observer):
             self.controller.set_dt(value)
 
     def model_is_changed(self):
+        row_data_for_tab = []
         """
         The method is called when the model changes.
 
@@ -46,6 +57,33 @@ class MyScreenView(MDScreen, Observer):
         self.ids.p.text = str(round(self.model.p, 2))
         self.ids.i.text = str(round(self.model.i, 2))
         self.ids.d.text = str(round(self.model.d, 2))
+
+        row_data_for_tab = [(
+            "1",
+            "Cohen-Coon",
+            str(round(self.model.p, 2)),
+            str(round(self.model.i, 2)),
+            str(round(self.model.d, 2)),
+            ),
+        ]
+
+        self.data_tables = MDDataTable(
+            size_hint = (0.9, 0.9),
+            # name column, width column, sorting function column(optional)
+            column_data = [
+                ("No.", dp(10)),
+                ("Method", dp(30)),
+                ("P", dp(10)),
+                ("I", dp(10)),
+                ("D", dp(10)),
+            ],
+            row_data = row_data_for_tab
+        )
+        self.ids.calc_data_table.clear_widgets()
+        self.ids.calc_data_table.add_widget(self.data_tables)
+
+    def on_tab_switch(self, *args):
+        self.current_tab = args[1].name
 
 
 Builder.load_file(os.path.join(os.path.dirname(__file__), "myscreen.kv"))
