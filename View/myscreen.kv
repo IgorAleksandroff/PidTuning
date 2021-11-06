@@ -18,7 +18,7 @@
             Tab:
                 id: tab1
                 name: 'tab1'
-                text: f"01"
+                text: f"PI"
 
                 MDBoxLayout:
                     orientation: 'vertical'
@@ -26,7 +26,7 @@
                     MDLabel:
                         text: "Control object:"
                         font_style: "H6"
-                        pos_hint: {"center_x": .5}
+                        pos_hint: {"center_x": .5,"center_y": .5}
                         adaptive_size: True
 
                     MDBoxLayout:
@@ -80,18 +80,14 @@
                         MyField:
                             id: d
 
+                    ScrollView:
+                        AnchorLayout:
+                            id: calc_pi_table
             Tab:
                 id: tab2
                 name: 'tab2'
-                text: f"02"
+                text: f"PID"
 
                 ScrollView:
                     AnchorLayout:
-                        id: calc_data_table
-
-                FloatLayout:
-                    MDTextFieldRect
-                        size_hint: None, None
-                        size: "200dp", "100dp"
-                        input_filter: "float"
-                        pos_hint: {"center_x": .5}
+                        id: calc_pid_table
