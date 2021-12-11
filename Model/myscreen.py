@@ -5,9 +5,9 @@
 # model when they are notified (in this case, it is the `model_is_changed`
 # method). For this, observers must be descendants of an abstract class,
 # inheriting which, the `model_is_changed` method must be overridden.
+from Model.objectmodel import ObjectModel
 
-
-class MyScreenModel:
+class MyScreenModel(ObjectModel):
     """
     The MyScreenModel class is a data model implementation. The model stores
     the values of the variables `c`, `d` and their sum. The model provides an
@@ -18,10 +18,10 @@ class MyScreenModel:
     MyScreenModel class task is to add two numbers.
     """
 
-    def __init__(self):
-        self._gain = 0
-        self._tau = 1
-        self._dt = 1
+    def __init__(self, gain=1, tau = 5, dt = 2):
+        self._gain = gain
+        self._tau = tau
+        self._dt = dt
         self._pp = 0
         self._ii = 0
         self._p = 0
@@ -30,26 +30,14 @@ class MyScreenModel:
         self._observers = []
 
     @property
-    def gain(self):
-        return self._gain
-
-    @property
-    def tau(self):
-        return self._tau
-
-    @property
-    def dt(self):
-        return self._dt
-
-    @property
     def pp(self):
         return self._pp
 
     @property
     def ii(self):
         return self._ii
-    @property
 
+    @property
     def p(self):
         return self._p
 
@@ -61,23 +49,23 @@ class MyScreenModel:
     def d(self):
         return self._d
 
-    @gain.setter
+    @ObjectModel.gain.setter
     def gain(self, value):
-        self._gain = value
+        self._gain = value if value > 0 else self._gain
         self.calculation_param()
-        self.notify_observers()
 
-    @tau.setter
+    @ObjectModel.tau.setter
     def tau(self, value):
-        self._tau = value
+        self._tau = value if value > 0 else self._tau
         self.calculation_param()
-        self.notify_observers()
 
-    @dt.setter
+    @ObjectModel.dt.setter
     def dt(self, value):
-        self._dt = value
+        if value == 0:
+            self._dt = 0.01
+        elif value > 0:
+            self._dt = value
         self.calculation_param()
-        self.notify_observers()
 
     def calculation_param(self):
         """The Cohen-Coon method calculates PI parameters."""
@@ -95,6 +83,8 @@ class MyScreenModel:
         self._i = 2.5 * self._dt * (self._tau + 0.185 * self._dt) / (self._tau + 0.611 * self._dt)
         # Calculating Derivative Time (Td)
         self._d = 0.37 * self._dt * self._tau / (self._tau + 0.185 * self._dt)
+
+        self.notify_observers()
 
     def add_observer(self, observer):
         self._observers.append(observer)
